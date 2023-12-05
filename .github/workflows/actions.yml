@@ -58,10 +58,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'npm'
       # Runs a set of commands using the runners shell
       - id: docker_image
         run: |
@@ -75,10 +71,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'npm'
       # Runs a set of commands using the runners shell
       - env:
           IMAGE: ${{needs.build.outputs.IMAGE}}
