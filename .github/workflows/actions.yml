@@ -11,9 +11,19 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  # Setting an environment variable with the value of a configuration variable
+  vars: ${{ toJson(vars) }}
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
+  build_env:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build env
+        run:
+          echo "$VARS_JSON" | jq -r 'keys[] as $k | "\($k)=\(.[$k])"' >> $GITHUB_ENV
   test:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -60,9 +70,7 @@ jobs:
       - uses: actions/checkout@v3
       # Runs a set of commands using the runners shell
       - id: docker_image
-        run: |
-          apk add bash
-          echo $AWS_ACCESS_KEY
+        run:
           ./cicd/build.sh
   deploy:
     # The type of runner that the job will run on
@@ -75,6 +83,5 @@ jobs:
       # Runs a set of commands using the runners shell
       - env:
           IMAGE: ${{needs.build.outputs.IMAGE}}
-        run: |
-          apk add bash
+        run:
           ./cicd/deploy.sh
