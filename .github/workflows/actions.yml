@@ -84,10 +84,11 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           user: ${{ vars.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
           connect_timeout: 10s
           script: |
             IMAGE=${{ vars.REGISTRY_URL }}/${{ github.event.repository.name }}:${{ github.sha }}
             aws ecr get-login-password | docker login --username AWS --password-stdin ${{ vars.REGISTRY_URL }}
             aws s3api get-object --bucket gobacsi-env --key dev/.env.dev ${{ vars.REMOTE_ENV }}
             docker rm -f dev-clinic-service
-            docker run -e START_COMMAND=start --env-file ./clinic-service/.env --name dev-clinic-service -p 3000:3000 -d "${IMAGE}"
+            docker run -e START_COMMAND=start --env-file ${{ vars.REMOTE_ENV }} --name dev-clinic-service -p 3000:3000 -d "${IMAGE}"
