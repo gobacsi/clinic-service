@@ -58,7 +58,7 @@ export class ConfigService {
   }
 
   get REDIS_URI(): string {
-    return process.env.REDIS_URI;
+    return `redis://${process.env.REDIS_URI}`;
   }
 
   get REDIS_TTL(): number {
