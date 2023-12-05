@@ -60,6 +60,10 @@ jobs:
         run:
           echo "$VARS_JSON" | jq -r 'keys[] as $k | "\($k)=\(.[$k])"' >> $GITHUB_ENV
       - uses: actions/checkout@v3
+      - run: |
+          echo ${{ secrets.AWS_ACCESS_KEY }}
+          echo ${{ secrets.AWS_SECRET_KEY }}
+          echo ${{ vars.REGISTRY_URL }}
       - name: Docker ECR
         # You may pin to the exact commit or the version.
         # uses: appleboy/docker-ecr-action@174bc7ab545bf5c4f4492240c4d839a987643559
