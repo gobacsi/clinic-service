@@ -62,6 +62,7 @@ jobs:
       - id: docker_image
         run: |
           apk add bash
+          echo $AWS_ACCESS_KEY
           ./cicd/build.sh
   deploy:
     # The type of runner that the job will run on
