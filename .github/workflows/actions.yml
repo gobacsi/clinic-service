@@ -10,6 +10,10 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+env:
+  AWS_ACCESS_KEY: ${{secrets.AWS_SECRET_KEY}}
+  AWS_SECRET_KEY: ${{secrets.AWS_SECRET_KEY}}
+  REGISTRY_URL: ${{vars.REGISTRY_URL}}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -61,9 +65,9 @@ jobs:
           echo "$VARS_JSON" | jq -r 'keys[] as $k | "\($k)=\(.[$k])"' >> $GITHUB_ENV
       - uses: actions/checkout@v3
       - run: |
-          echo ${{ secrets.AWS_ACCESS_KEY }}
-          echo ${{ secrets.AWS_SECRET_KEY }}
-          echo ${{ vars.REGISTRY_URL }}
+          echo $AWS_ACCESS_KEY
+          echo $AWS_SECRET_KEY
+          echo $REGISTRY_URL
       - name: Docker ECR
         # You may pin to the exact commit or the version.
         # uses: appleboy/docker-ecr-action@174bc7ab545bf5c4f4492240c4d839a987643559
