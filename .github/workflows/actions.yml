@@ -77,12 +77,15 @@ jobs:
     needs: build
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: D3rHase/ssh-command-action@v0.2.2
+      - name: ssh pipelines
+        uses: cross-the-world/ssh-pipeline@master
+        env:
+          WELCOME: "ssh pipeline"
         with:
-          host: ${{secrets.SSH_HOST}} # Remote server address / ip - required
-          user: ${{vars.SSH_USER}} # Remote server user - required
-          private_key: ${{secrets.SSH_KEY}} # Private ssh key registered on the remote server - required
-          command:
+          host: ${{ secrets.SSH_HOST }}
+          user: ${{ vars.SSH_USER }}
+          connect_timeout: 10s
+          script: |
             IMAGE=${{ vars.REGISTRY_URL }}/${{ github.event.repository.name }}:${{ github.sha }}
             aws ecr get-login-password | docker login --username AWS --password-stdin ${{ vars.REGISTRY_URL }}
             aws s3api get-object --bucket gobacsi-env --key dev/.env.dev ${{ vars.REMOTE_ENV }}
