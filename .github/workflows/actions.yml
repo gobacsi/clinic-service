@@ -86,6 +86,6 @@ jobs:
           script: |
             IMAGE=${{ vars.REGISTRY_URL }}/${{ github.event.repository.name }}:${{ github.sha }}
             aws ecr get-login-password | docker login --username AWS --password-stdin ${{ vars.REGISTRY_URL }}
-            aws s3api get-object --bucket gobacsi-env --key $S3_ENV_PATH ${{ vars.REMOTE_ENV }}
+            aws s3api get-object --bucket gobacsi-env --key ${{ vars.S3_ENV_PATH }} ${{ vars.REMOTE_ENV }}
             docker rm -f dev-clinic-service
             docker run -e START_COMMAND=start --env-file ${{ vars.REMOTE_ENV }} --name dev-clinic-service -p 3000:3000 -d "${IMAGE}"
