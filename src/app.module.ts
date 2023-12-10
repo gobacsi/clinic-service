@@ -25,6 +25,7 @@ import { RedisModule } from './modules/redis';
         sortSchema: true,
         debug: configService.IS_DEVELOPMENT_MODE,
         playground: configService.IS_DEVELOPMENT_MODE,
+        introspection: configService.IS_DEVELOPMENT_MODE,
         cache: 'bounded',
         buildSchemaOptions: {
           numberScalarMode: 'integer',
