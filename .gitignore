@@ -52,3 +52,4 @@ local
 .env
 .env.dev
 coverage
+.vscode

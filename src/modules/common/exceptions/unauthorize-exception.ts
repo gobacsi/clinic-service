@@ -1,8 +1,7 @@
-import { HttpStatus } from '../common.constants';
-import { ApiException } from './api-exception';
+import { GraphQLException } from './graphql-exception';
 
-export class UnauthorizedException<T> extends ApiException<T> {
-  constructor(errorCode: string, errorMessage?: string, data?: T, originError?: Error) {
-    super(HttpStatus.UNAUTHORIZED, errorCode, errorMessage, data, originError);
+export class UnauthorizedException<T> extends GraphQLException<T> {
+  constructor(message: string) {
+    super('UNAUTHORIZED', message);
   }
 }

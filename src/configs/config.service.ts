@@ -84,6 +84,22 @@ export class ConfigService {
   get DATALOADER_TTL(): number {
     return Number(process.env.DATALOADER_TTL);
   }
+
+  get KEYCLOAK_URL(): string {
+    return process.env.KEYCLOAK_URL;
+  }
+
+  get KEYCLOAK_REALM(): string {
+    return process.env.KEYCLOAK_REALM;
+  }
+
+  get KEYCLOAK_CLIENT_ID(): string {
+    return process.env.KEYCLOAK_CLIENT_ID;
+  }
+
+  get KEYCLOAK_CLIENT_SECRET(): string {
+    return process.env.KEYCLOAK_CLIENT_SECRET;
+  }
 }
 
 export const configService = new ConfigService();

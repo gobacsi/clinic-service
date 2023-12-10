@@ -1,5 +1,5 @@
 import { ApolloFederationDriver, ApolloFederationDriverConfig } from '@nestjs/apollo';
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
@@ -7,7 +7,7 @@ import { Logger } from 'winston';
 import { ConfigService, configService } from './configs/config.service';
 import databaseConfig from './configs/database';
 import redisConfig from './configs/redis';
-import { AuthenticationMiddleware } from './middlewares/authentication.middleware';
+import { AuthModule } from './modules/auth/auth.module';
 import { ClinicLoader } from './modules/clinic/clinic.dataloader';
 import { ClinicModule } from './modules/clinic/clinic.module';
 import { CommonModule } from './modules/common';
@@ -18,7 +18,7 @@ import { RedisModule } from './modules/redis';
   imports: [
     GraphQLModule.forRootAsync<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,
-      imports: [ClinicModule],
+      imports: [ClinicModule, AuthModule],
       useFactory: (clinicLoader: ClinicLoader) => ({
         autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
         path: '/clinic/graphql',
@@ -45,15 +45,9 @@ import { RedisModule } from './modules/redis';
     HealthcheckModule.register(),
     CommonModule,
     ClinicModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [ConfigService, Logger],
 })
-export class AppModule {
-  configure(consumer: MiddlewareConsumer): void {
-    consumer
-      .apply(AuthenticationMiddleware)
-      .exclude({ path: '/clinic/health', method: RequestMethod.ALL })
-      .forRoutes({ path: '/clinic/*', method: RequestMethod.ALL });
-  }
-}
+export class AppModule {}

@@ -22,6 +22,12 @@ directive @shareable on FIELD_DEFINITION | OBJECT
 
 directive @tag(name: String!) repeatable on ARGUMENT_DEFINITION | ENUM | ENUM_VALUE | FIELD_DEFINITION | INPUT_FIELD_DEFINITION | INPUT_OBJECT | INTERFACE | OBJECT | SCALAR | UNION
 
+type AuthToken {
+  access_token: String!
+  refresh_token: String!
+  token_type: String!
+}
+
 type ClinicModel {
   createdAt: DateTime!
   id: Int!
@@ -33,8 +39,25 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Mutation {
+  login(otp: String!, phoneNumber: String!): AuthToken!
+}
+
+type Otp {
+  code: String!
+  expiresIn: Int!
+}
+
 type Query {
   clinicById(id: Int!): [ClinicModel!]!
+  myProfile: User!
+  sendLoginOtp(phoneNumber: String!): Otp!
+}
+
+type User {
+  id: String!
+  phoneNumber: String!
+  username: String!
 }
 
 scalar link__Import
